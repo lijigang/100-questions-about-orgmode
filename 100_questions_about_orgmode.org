@@ -1,0 +1,197 @@
+#+title: 100-questions-about-orgmode
+#+options: toc:nil date:nil num:nil
+* orgmode [0/0]
+  :PROPERTIES:
+  :COOKIE_DATA: checkbox recursive
+  :END:
+** General [1/1]
+  :PROPERTIES:
+  :COOKIE_DATA: checkbox recursive
+  :END:
+ - [X] 如何更改行间距
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq line-spacing 0.25))
+   #+end_src
+   
+
+** Tasks [9/9]
+ - [X] 如何设置默认的 TODO Keywords
+   
+  #+begin_src emacs-lisp
+  (after! org
+    (setq org-todo-keywords
+          '((sequence "TODO" "WORK" "|" "DONE"))))
+  #+end_src
+   
+
+ - [X] 如何给指定的文件设置特定的 TODO Keywords
+   
+  #+begin_src emacs-lisp :tangle yes
+  ;; 在指定文件顶部增加#+todo, 设置所需的Keywords
+  #+todo: 待定(d) 安排(a) | 结束(j)
+  #+end_src
+   
+
+ - [X] 如何在完成任务时自动打上完成时间的标签
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-log-done t))
+
+     ;; Possible values are:
+
+     ;;   nil     Don't add anything, just change the keyword
+     ;;   time    (or t) Add a time stamp to the task
+     ;;   note    Prompt for a note and add it with template org-log-note-headings
+
+   #+end_src
+   
+
+ - [X] 如何让任务的 Property 可以被子任务继承
+   
+   #+begin_src emacs-lisp :tangle yes
+     ;; 比如你想设置 :header-args: :mkdirp yes 之类的属性, 就会希望子任务可
+     ;; 以继承
+   (after! org
+     (setq org-use-property-inheritance t))
+   #+end_src
+   
+
+ - [X] 如何让 =C-a= 在任务标题上面更好用
+   
+   #+begin_src emacs-lisp :tangle yes
+     ;; When t, C-a will bring back the cursor to the beginning of the
+     ;; headline text, i.e. after the stars and after a possible TODO
+     ;; keyword.
+   (after! org
+     (setq org-special-ctrl-a/e t))
+   #+end_src
+   
+
+ - [X] 如何让 =C-k= 在任务标题上面更好用
+   
+   #+begin_src emacs-lisp :tangle yes
+     ;; When t, the following will happen while the cursor is in the
+     ;; headline:
+
+     ;; - When at the beginning of a headline, kill the entire subtree.
+     ;; - When in the middle of the headline text, kill the text up to the
+     ;; - tags.
+     ;; - When after the headline text and before the tags, kill all
+     ;; - the tags.
+   (after! org
+     (setq org-special-ctrl-k t))
+   #+end_src
+   
+
+ - [X] 如何隐藏任务前面的多个* 符号
+   
+  #+begin_src emacs-lisp :tangle yes
+
+   ;; Non-nil means hide the first N-1 stars in a headline.
+  (after! org
+    (setq org-hide-leading-stars t))
+  #+end_src
+   
+
+ - [X] 如何替换任务折叠状态时尾部的符号
+   
+   #+begin_src emacs-lisp :tangle yes
+   ;; 替换为你喜欢的符号即可
+   (after! org
+     (setq org-ellipsis " ▾ "))
+   #+end_src
+   
+
+ - [X] 如何插入 heading 的时候, 考虑到当前 subtree 的内容, 在其后插入
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-insert-heading-respect-content nil))
+   #+end_src
+   
+** List [1/1]
+- [X] 如何更改子 list 的显示符号
+  
+  #+begin_src emacs-lisp :tangle yes
+  (after! org
+      (setq org-list-demote-modify-bullet
+        '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))))
+  #+end_src
+  
+
+** Capture [0/0]
+** Agenda [6/6]
+ - [X] 如何设定 Agenda 文件的相对路径
+   
+    #+begin_src emacs-lisp :tangle yes
+    ;; 1. When a capture template specifies a target file that is not an
+    ;;    absolute path.  The path will then be interpreted relative to
+    ;;    org-directory
+    ;; 2. When the value of variable org-agenda-files is a single file, any
+    ;;    relative paths in this file will be taken as relative to
+    ;;    org-directory.
+    (setq org-directory "~/Documents/emacs/org/")
+    #+end_src
+   
+ - [X] 如何指定一个目录及其子目录中的所有 org 文件为 agenda files
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-agenda-files
+           (directory-files-recursively
+            (concat org-directory "roam") "\\.org$")))
+   #+end_src
+   
+ - [X] 如何设定自己的私有纪念日文件
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq diary-file
+           (concat org-directory "private/standard-diary")))
+
+   ;; 在standard-diary 文件中, 写下面这行, 就会在生日当天看到后面的提示语句
+   ;; %%(org-anniversary 2000 1 1) I am %d years old
+   #+end_src
+   
+ - [X] 如何设定 Agenda view 时间显示为两位数(9:30 ->  09:30)
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-agenda-time-leading-zero t))
+   #+end_src
+   
+ - [X] 如何设定 Agenda view 默认展示区间为一周
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+
+     ;; Number of days to include in overview display.
+     ;; Can be day, week, month, year, or any number of days.
+     (setq org-agenda-span 7))
+   #+end_src
+   
+ - [X] 如何设定 Agenda view 默认从周一开始展示
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+
+     ;; 0 denotes Sunday, 1 denotes Monday, etc.
+     ;; When nil, always start on the current day.
+     (setq org-agenda-start-on-weekday 1))
+   #+end_src
+   
+
+** Block [1/1]
+
+ - [X] 如何在 Souce Block 中像在语言 mode 中一样的缩进
+   
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-src-tab-acts-natively t))
+   #+end_src
+   
+
+** Rifile
