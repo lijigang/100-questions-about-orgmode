@@ -112,6 +112,14 @@
      (setq org-insert-heading-respect-content nil))
    #+end_src
    
+** Tag [1/1]
+   - [X] 如何设定默认的 Tags
+     
+  #+begin_src emacs-lisp :tangle yes
+  (after! org
+    (setq org-tag-alist '(("@工作" . ?w) ("@生活" . ?l) ("@学习" . ?s))))
+  #+end_src
+     
 ** List [1/1]
 - [X] 如何更改子 list 的显示符号
   
