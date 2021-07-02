@@ -4,7 +4,7 @@
   :PROPERTIES:
   :COOKIE_DATA: checkbox recursive
   :END:
-** General [1/1]
+** General [2/2]
   :PROPERTIES:
   :COOKIE_DATA: checkbox recursive
   :END:
@@ -15,6 +15,34 @@
      (setq line-spacing 0.25))
    #+end_src
    
+
+ - [X] 如何更改加粗样式
+   
+   #+begin_src emacs-lisp :tangle yes
+   (defface org-bold
+     '((t :foreground "#d2268b"
+          :background "#fefefe"
+          :weight bold
+          :underline t
+          :overline t))
+     "Face for org-mode bold."
+     :group 'org-faces )
+
+   (setq org-emphasis-alist
+         '(("*" org-bold)
+           ("/" italic)
+           ("_" underline)
+           ("=" ;; (:background "maroon" :foreground "white")
+            org-verbatim verbatim)
+           ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
+            org-code verbatim)
+           ("+" (:strike-through t))))
+
+   (set-face-background 'org-bold "#fefefe")
+   (set-face-background 'org-verbatim "#fefefe")
+   #+end_src
+   
+
 
 ** Tasks [9/9]
  - [X] 如何设置默认的 TODO Keywords
