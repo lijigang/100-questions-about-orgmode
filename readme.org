@@ -157,6 +157,35 @@
         '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))))
   #+end_src
   
+** Table [2/2]
+- [X]  orgmode 的表格是否支持数据透视表
+   
+       需要安装额外的 Package:
+
+       https://github.com/tbanel/orgaggregate
+
+   #+begin_quote
+
+       Aggregating a table is creating a new table by computing sums,
+       averages, and so on, out of material from the first table.
+
+   #+end_quote
+   
+
+- [X] orgmode 的表格是否支持画 ascii 图形
+  
+   光标放在要画图的数据列上, 然后 M-x: orgtbl-ascii-draw
+  #+begin_quote
+    | x | x^3 |                                        |
+    | 1 |   1 | :                                      |
+    | 2 |   8 | Wc                                     |
+    | 3 |  27 | WWWWh                                  |
+    | 4 |  64 | WWWWWWWWWWW.                           |
+    | 5 | 125 | WWWWWWWWWWWWWWWWWWWWWl                 |
+    | 6 | 216 | WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWc |
+    #+tblfm: $2=$1*$1*$1::$3='(orgtbl-ascii-draw $2 0 289 50)
+  #+end_quote
+  
 
 ** Capture [0/0]
 ** Agenda [6/6]
@@ -230,4 +259,15 @@
    #+end_src
    
 
-** Rifile
+** Rifile [0/0]
+** UI [0/0]
+   - [ ] 如何
+   
+   #+begin_src emacs-lisp :tangle yes
+   (use-package! pangu-spacing
+     :config
+     (global-pangu-spacing-mode 1)
+     ;; 在中英文符号之间, 真正地插入空格
+     (setq pangu-spacing-real-insert-separtor t))
+   #+end_src
+   
