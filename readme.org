@@ -187,7 +187,7 @@
   
 
 ** Capture [0/0]
-** Agenda [7/7]
+** Agenda [8/8]
  - [X] 如何设定 Agenda 文件的相对路径
    
     #+begin_src emacs-lisp :tangle yes
@@ -253,6 +253,13 @@
    (setq org-agenda-use-time-grid nil)
    #+end_src
    
+ - [X] 如何关闭 Agenda view 中所有 tags 的显示
+   
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-hide-tags-regexp ".")
+   #+end_src
+   
+
 
 ** Block [1/1]
 
