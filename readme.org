@@ -43,7 +43,6 @@
    #+end_src
    
 
-
 ** Tasks [9/9]
  - [X] 如何设置默认的 TODO Keywords
    
@@ -188,7 +187,7 @@
   
 
 ** Capture [0/0]
-** Agenda [6/6]
+** Agenda [7/7]
  - [X] 如何设定 Agenda 文件的相对路径
    
     #+begin_src emacs-lisp :tangle yes
@@ -248,6 +247,12 @@
      (setq org-agenda-start-on-weekday 1))
    #+end_src
    
+ - [X] 如何关闭 Agenda view 时间分隔线
+   
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-use-time-grid nil)
+   #+end_src
+   
 
 ** Block [1/1]
 
@@ -259,9 +264,8 @@
    #+end_src
    
 
-** Rifile [0/0]
-** UI [0/0]
-   - [ ] 如何
+** UI [1/1]
+   - [X] 如何在中英文字符中间自动插入空格
    
    #+begin_src emacs-lisp :tangle yes
    (use-package! pangu-spacing
