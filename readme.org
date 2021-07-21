@@ -43,7 +43,7 @@
    #+end_src
    
 
-** Tasks [9/9]
+** Tasks [10/10]
  - [X] 如何设置默认的 TODO Keywords
    
   #+begin_src emacs-lisp
@@ -75,6 +75,14 @@
 
    #+end_src
    
+
+ - [X] 如何设置记录 log 信息到 drawer 中?
+  
+  #+begin_src emacs-lisp :tangle yes
+  (after! org
+    (setq org-log-into-drawer t))
+  #+end_src
+  
 
  - [X] 如何让任务的 Property 可以被子任务继承
    
