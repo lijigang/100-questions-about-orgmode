@@ -195,7 +195,7 @@
   
 
 ** Capture [0/0]
-** Agenda [8/8]
+** Agenda [10/10]
  - [X] 如何设定 Agenda 文件的相对路径
    
     #+begin_src emacs-lisp :tangle yes
@@ -267,7 +267,18 @@
    (setq org-agenda-hide-tags-regexp ".")
    #+end_src
    
-
+ - [X] 如何关闭 Agenda view 显示已经完成的预约事项
+   
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-skip-scheduled-if-done t)
+   #+end_src
+   
+ - [X] 如何设置 Agenda view 的窗口显示?
+   
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-window-setup 'current-window)
+   #+end_src
+   
 
 ** Block [1/1]
 
