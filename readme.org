@@ -4,65 +4,236 @@
   :PROPERTIES:
   :COOKIE_DATA: checkbox recursive
   :END:
-** General [2/2]
+** Agenda [12/12]
+ - [X] 如何设定 Agenda 文件的相对路径
+    #+begin_src emacs-lisp :tangle yes
+    ;; 1. When a capture template specifies a target file that is not an
+    ;;    absolute path.  The path will then be interpreted relative to
+    ;;    org-directory
+    ;; 2. When the value of variable org-agenda-files is a single file, any
+    ;;    relative paths in this file will be taken as relative to
+    ;;    org-directory.
+    (setq org-directory "~/Documents/emacs/org/")
+    #+end_src
+ - [X] 如何指定一个目录及其子目录中的所有 org 文件为 agenda files
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-agenda-files
+           (directory-files-recursively
+            (concat org-directory "roam") "\\.org$")))
+   #+end_src
+ - [X] 如何设定自己的私有纪念日文件
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq diary-file
+           (concat org-directory "private/standard-diary")))
+
+   ;; 在standard-diary 文件中, 写下面这行, 就会在生日当天看到后面的提示语句
+   ;; %%(org-anniversary 2000 1 1) I am %d years old
+   #+end_src
+ - [X] 如何设定 Agenda view 时间显示为两位数(9:30 ->  09:30)
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-agenda-time-leading-zero t))
+   #+end_src
+ - [X] 如何设定 Agenda view 默认展示区间为一周
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+
+     ;; Number of days to include in overview display.
+     ;; Can be day, week, month, year, or any number of days.
+     (setq org-agenda-span 7))
+   #+end_src
+ - [X] 如何设定 Agenda view 默认从周一开始展示
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+
+     ;; 0 denotes Sunday, 1 denotes Monday, etc.
+     ;; When nil, always start on the current day.
+     (setq org-agenda-start-on-weekday 1))
+   #+end_src
+ - [X] 如何关闭 Agenda view 时间分隔线
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-use-time-grid nil)
+   #+end_src
+ - [X] 如何关闭 Agenda view 中所有 tags 的显示
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-hide-tags-regexp ".")
+   #+end_src
+ - [X] 如何关闭 Agenda view 显示已经完成的预约事项
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-skip-scheduled-if-done t)
+   #+end_src
+ - [X] 如何设置 Agenda view 的窗口显示?
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-window-setup 'current-window)
+   #+end_src
+ - [X] 如何设置 Agenda view deadline 随时间紧迫程度的样式
+   #+begin_src emacs-lisp
+  (setq org-agenda-deadline-faces
+        '((1.001 . error)
+          (1.0 . org-warning)
+          (0.5 . org-upcoming-deadline)
+          (0.0 . org-upcoming-distant-deadline)))
+   #+end_src
+ - [X] 如何关闭 Agenda view 中的小时分隔线
+   #+begin_src emacs-lisp
+   (setq org-agenda-use-time-grid nil)
+   #+end_src
+
+** Block [6/6]
+
+ - [X] 如何在 Source Block 中像在语言 mode 中一样的缩进
+   #+begin_src emacs-lisp :tangle yes
+   (after! org
+     (setq org-src-tab-acts-natively t)
+     (setq org-src-preserve-indentation nil))
+   #+end_src
+ - [X] 如何让 code block 默认折叠展示
+   #+begin_src emacs-lisp
+   (after! org
+          (setq org-hide-block-startup t))
+   #+end_src
+ - [X] 如何让 code block 折叠时显示为一个符号
+   #+begin_src emacs-lisp
+   (defun eli-hide-org-block-begin-line (orig from to flag spec)
+  (let* ((beg-of-line (save-excursion
+                        (beginning-of-line)
+                        (point)))
+         (lang (car (org-babel-get-src-block-info)))
+         (beg (+ beg-of-line
+                 12
+                 (length lang))))
+    (if (eq spec 'org-hide-block)
+        (funcall orig beg to flag spec)
+      (funcall orig from to flag spec))))
+
+(advice-add 'org-flag-region :around #'eli-hide-org-block-begin-line)
+
+   #+end_src
+ - [X] 如何禁用 evaluate code block 时的确认提示
+   #+begin_src emacs-lisp
+   (after! org
+     (setq org-confirm-babel-evaluate nil))
+   #+end_src
+ - [X] 如何美化 quote 和 verse block
+   #+begin_src emacs-lisp
+   (setq org-fontify-quote-and-verse-blocks t)
+   #+end_src
+ - [X] 如何使用 Plantuml
+   #+begin_src emacs-lisp
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+  (setq org-plantuml-jar-path (expand-file-name "~/Documents/emacs/org/private/plantuml.jar"))
+  (setq plantuml-default-exec-mode 'jar)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((plantuml . t)))
+   #+end_src
+
+** Capture [0/0]
+** Export [1/1]
+- [X] 如何配置导出 HTML 的样式
+  #+begin_src emacs-lisp
+  (setq org-html-coding-system 'utf-8)
+  (setq org-html-doctype "html5")
+  (setq org-html-head
+        "<link rel='stylesheet' type='text/css' href='https://gongzhitaao.org/orgcss/org.css'/> ")
+  #+end_src
+** General [3/3]
   :PROPERTIES:
   :COOKIE_DATA: checkbox recursive
   :END:
- - [X] 如何更改行间距
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
-     (setq line-spacing 0.25))
+
+ - [X] 如何在 macOS 上粘贴图片到 Emacs
+   #+begin_src emacs-lisp
+   (use-package! org-mac-image-paste
+     :config
+     (org-mac-image-paste-mode 1)
+     )
+
    #+end_src
-   
+** LaTex [1/1]
+- [X] 如何直观展示 LaTeX 公式效果
+  #+begin_src emacs-lisp
+(use-package! org-fragtog
+  :hook (org-mode . org-fragtog-mode))
 
- - [X] 如何更改加粗样式
-   
-   #+begin_src emacs-lisp :tangle yes
-   (defface org-bold
-     '((t :foreground "#d2268b"
-          :background "#fefefe"
-          :weight bold
-          :underline t
-          :overline t))
-     "Face for org-mode bold."
-     :group 'org-faces )
+  #+end_src
+** List [2/2]
+- [X] 如何更改子 list 的显示符号
+  #+begin_src emacs-lisp :tangle yes
+  (after! org
+      (setq org-list-demote-modify-bullet
+        '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))))
+  #+end_src
+- [X] 如何更改 List 的样式
+  #+begin_src emacs-lisp
+(font-lock-add-keywords
+ 'org-mode
+ '(("^ +\\([-*]\\) "
+    (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "▻"))))))
+  #+end_src
+** Table [3/3]
+- [X]  orgmode 的表格是否支持数据透视表
+       需要安装额外的 Package:
 
-   (setq org-emphasis-alist
-         '(("*" org-bold)
-           ("/" italic)
-           ("_" underline)
-           ("=" ;; (:background "maroon" :foreground "white")
-            org-verbatim verbatim)
-           ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
-            org-code verbatim)
-           ("+" (:strike-through t))))
+       https://github.com/tbanel/orgaggregate
 
-   (set-face-background 'org-bold "#fefefe")
-   (set-face-background 'org-verbatim "#fefefe")
-   #+end_src
-   
+   #+begin_quote
 
-** Tasks [10/10]
+       Aggregating a table is creating a new table by computing sums,
+       averages, and so on, out of material from the first table.
+
+   #+end_quote
+
+- [X] orgmode 的表格是否支持画 ascii 图形
+   光标放在要画图的数据列上, 然后 M-x: orgtbl-ascii-draw
+  #+begin_quote
+    | x | x^3 |                                        |
+    | 1 |   1 | :                                      |
+    | 2 |   8 | Wc                                     |
+    | 3 |  27 | WWWWh                                  |
+    | 4 |  64 | WWWWWWWWWWW.                           |
+    | 5 | 125 | WWWWWWWWWWWWWWWWWWWWWl                 |
+    | 6 | 216 | WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWc |
+    #+tblfm: $2=$1*$1*$1::$3='(orgtbl-ascii-draw $2 0 289 50)
+  #+end_quote
+
+- [X]  orgmode 的表格如何中英文混排对齐
+  #+begin_src emacs-lisp
+
+  (use-package! valign
+    :config
+    (setq valign-fancy-bar t)
+    (add-hook 'org-mode-hook #'valign-mode))
+  #+end_src
+
+
+** Tasks [12/12]
  - [X] 如何设置默认的 TODO Keywords
-   
   #+begin_src emacs-lisp
   (after! org
     (setq org-todo-keywords
           '((sequence "TODO" "WORK" "|" "DONE"))))
   #+end_src
-   
 
  - [X] 如何给指定的文件设置特定的 TODO Keywords
-   
   #+begin_src emacs-lisp :tangle yes
   ;; 在指定文件顶部增加#+todo, 设置所需的Keywords
   #+todo: 待定(d) 安排(a) | 结束(j)
   #+end_src
-   
+
+ - [X] 如何美化 headline bullets
+   #+begin_src emacs-lisp
+   ;; 使用 org-superstar package
+   (after! org-superstar
+     ;; other symbols like: 🦄 🧙 🐻 "🙘" "🙙" "🙚" "🙛"
+     (setq org-superstar-headline-bullets-list '( "☯" "☷" "☲" "☵")
+           org-superstar-prettify-item-bullets t ))
+   #+end_src
 
  - [X] 如何在完成任务时自动打上完成时间的标签
-   
    #+begin_src emacs-lisp :tangle yes
    (after! org
      (setq org-log-done t))
@@ -74,28 +245,22 @@
      ;;   note    Prompt for a note and add it with template org-log-note-headings
 
    #+end_src
-   
 
  - [X] 如何设置记录 log 信息到 drawer 中?
-  
   #+begin_src emacs-lisp :tangle yes
   (after! org
     (setq org-log-into-drawer t))
   #+end_src
-  
 
  - [X] 如何让任务的 Property 可以被子任务继承
-   
    #+begin_src emacs-lisp :tangle yes
      ;; 比如你想设置 :header-args: :mkdirp yes 之类的属性, 就会希望子任务可
      ;; 以继承
    (after! org
      (setq org-use-property-inheritance t))
    #+end_src
-   
 
  - [X] 如何让 =C-a= 在任务标题上面更好用
-   
    #+begin_src emacs-lisp :tangle yes
      ;; When t, C-a will bring back the cursor to the beginning of the
      ;; headline text, i.e. after the stars and after a possible TODO
@@ -103,10 +268,8 @@
    (after! org
      (setq org-special-ctrl-a/e t))
    #+end_src
-   
 
  - [X] 如何让 =C-k= 在任务标题上面更好用
-   
    #+begin_src emacs-lisp :tangle yes
      ;; When t, the following will happen while the cursor is in the
      ;; headline:
@@ -119,185 +282,104 @@
    (after! org
      (setq org-special-ctrl-k t))
    #+end_src
-   
 
  - [X] 如何隐藏任务前面的多个* 符号
-   
   #+begin_src emacs-lisp :tangle yes
 
    ;; Non-nil means hide the first N-1 stars in a headline.
   (after! org
     (setq org-hide-leading-stars t))
   #+end_src
-   
 
  - [X] 如何替换任务折叠状态时尾部的符号
-   
    #+begin_src emacs-lisp :tangle yes
    ;; 替换为你喜欢的符号即可
    (after! org
      (setq org-ellipsis " ▾ "))
    #+end_src
-   
 
  - [X] 如何插入 heading 的时候, 考虑到当前 subtree 的内容, 在其后插入
-   
    #+begin_src emacs-lisp :tangle yes
    (after! org
      (setq org-insert-heading-respect-content nil))
    #+end_src
-   
+
+ - [X] 如何在完成任务时, 增加删除划掉样式
+   #+begin_src emacs-lisp
+  ;; 完成任务时, 将其划线勾掉
+  (set-face-attribute 'org-headline-done nil :strike-through t)
+
+   #+end_src
 ** Tag [1/1]
    - [X] 如何设定默认的 Tags
-     
   #+begin_src emacs-lisp :tangle yes
   (after! org
     (setq org-tag-alist '(("@工作" . ?w) ("@生活" . ?l) ("@学习" . ?s))))
   #+end_src
-     
-** List [1/1]
-- [X] 如何更改子 list 的显示符号
-  
-  #+begin_src emacs-lisp :tangle yes
-  (after! org
-      (setq org-list-demote-modify-bullet
-        '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))))
-  #+end_src
-  
-** Table [2/2]
-- [X]  orgmode 的表格是否支持数据透视表
-   
-       需要安装额外的 Package:
+** UI [5/5]
+- [X] 如何自定义各标标题的大小和字体粗细
+    #+begin_src emacs-lisp
+    (after! org
+    (custom-set-faces!
+        '(outline-1 :weight extra-bold :height 1.25)
+        '(outline-2 :weight bold :height 1.15)
+        '(outline-3 :weight bold :height 1.12)
+        '(outline-4 :weight semi-bold :height 1.09)
+        '(outline-5 :weight semi-bold :height 1.06)
+        '(outline-6 :weight semi-bold :height 1.03)
+        '(outline-8 :weight semi-bold)
+        '(outline-9 :weight semi-bold))
 
-       https://github.com/tbanel/orgaggregate
+    (custom-set-faces!
+        '(org-document-title :height 1.2)))
 
-   #+begin_quote
-
-       Aggregating a table is creating a new table by computing sums,
-       averages, and so on, out of material from the first table.
-
-   #+end_quote
-   
-
-- [X] orgmode 的表格是否支持画 ascii 图形
-  
-   光标放在要画图的数据列上, 然后 M-x: orgtbl-ascii-draw
-  #+begin_quote
-    | x | x^3 |                                        |
-    | 1 |   1 | :                                      |
-    | 2 |   8 | Wc                                     |
-    | 3 |  27 | WWWWh                                  |
-    | 4 |  64 | WWWWWWWWWWW.                           |
-    | 5 | 125 | WWWWWWWWWWWWWWWWWWWWWl                 |
-    | 6 | 216 | WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWc |
-    #+tblfm: $2=$1*$1*$1::$3='(orgtbl-ascii-draw $2 0 289 50)
-  #+end_quote
-  
-
-** Capture [0/0]
-** Agenda [10/10]
- - [X] 如何设定 Agenda 文件的相对路径
-   
-    #+begin_src emacs-lisp :tangle yes
-    ;; 1. When a capture template specifies a target file that is not an
-    ;;    absolute path.  The path will then be interpreted relative to
-    ;;    org-directory
-    ;; 2. When the value of variable org-agenda-files is a single file, any
-    ;;    relative paths in this file will be taken as relative to
-    ;;    org-directory.
-    (setq org-directory "~/Documents/emacs/org/")
     #+end_src
-   
- - [X] 如何指定一个目录及其子目录中的所有 org 文件为 agenda files
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
-     (setq org-agenda-files
-           (directory-files-recursively
-            (concat org-directory "roam") "\\.org$")))
-   #+end_src
-   
- - [X] 如何设定自己的私有纪念日文件
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
-     (setq diary-file
-           (concat org-directory "private/standard-diary")))
+- [X] 如何在中英文字符中间自动插入空格
+    #+begin_src emacs-lisp :tangle yes
+    (use-package! pangu-spacing
+    :config
+    (global-pangu-spacing-mode 1)
+    ;; 在中英文符号之间, 真正地插入空格
+    (setq pangu-spacing-real-insert-separtor t))
+    #+end_src
 
-   ;; 在standard-diary 文件中, 写下面这行, 就会在生日当天看到后面的提示语句
-   ;; %%(org-anniversary 2000 1 1) I am %d years old
-   #+end_src
-   
- - [X] 如何设定 Agenda view 时间显示为两位数(9:30 ->  09:30)
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
-     (setq org-agenda-time-leading-zero t))
-   #+end_src
-   
- - [X] 如何设定 Agenda view 默认展示区间为一周
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
+- [X] 如何美化 bold/code/italitic 等样式
+    #+begin_src emacs-lisp
+    (use-package! org-appear
+        :hook (org-mode . org-appear-mode)
+        :config
+        (setq org-appear-autoemphasis t
+            org-appear-autosubmarkers t
+            org-appear-autolinks nil))
 
-     ;; Number of days to include in overview display.
-     ;; Can be day, week, month, year, or any number of days.
-     (setq org-agenda-span 7))
-   #+end_src
-   
- - [X] 如何设定 Agenda view 默认从周一开始展示
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
+    #+end_src
+- [X] 如何更改行间距
+    #+begin_src emacs-lisp :tangle yes
+    (after! org
+        (setq line-spacing 0.25))
+    #+end_src
 
-     ;; 0 denotes Sunday, 1 denotes Monday, etc.
-     ;; When nil, always start on the current day.
-     (setq org-agenda-start-on-weekday 1))
-   #+end_src
-   
- - [X] 如何关闭 Agenda view 时间分隔线
-   
-   #+begin_src emacs-lisp :tangle yes
-   (setq org-agenda-use-time-grid nil)
-   #+end_src
-   
- - [X] 如何关闭 Agenda view 中所有 tags 的显示
-   
-   #+begin_src emacs-lisp :tangle yes
-   (setq org-agenda-hide-tags-regexp ".")
-   #+end_src
-   
- - [X] 如何关闭 Agenda view 显示已经完成的预约事项
-   
-   #+begin_src emacs-lisp :tangle yes
-   (setq org-agenda-skip-scheduled-if-done t)
-   #+end_src
-   
- - [X] 如何设置 Agenda view 的窗口显示?
-   
-   #+begin_src emacs-lisp :tangle yes
-   (setq org-agenda-window-setup 'current-window)
-   #+end_src
-   
+- [X] 如何更改加粗样式
+    #+begin_src emacs-lisp :tangle yes
+    (defface org-bold
+        '((t :foreground "#d2268b"
+        :background "#fefefe"
+        :weight bold
+        :underline t
+        :overline t))
+        "Face for org-mode bold."
+        :group 'org-faces )
 
-** Block [1/1]
+    (setq org-emphasis-alist
+            '(("*" org-bold)
+            ("/" italic)
+            ("_" underline)
+            ("=" ;; (:background "maroon" :foreground "white")
+            org-verbatim verbatim)
+            ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
+            org-code verbatim)
+            ("+" (:strike-through t))))
 
- - [X] 如何在 Souce Block 中像在语言 mode 中一样的缩进
-   
-   #+begin_src emacs-lisp :tangle yes
-   (after! org
-     (setq org-src-tab-acts-natively t))
-   #+end_src
-   
-
-** UI [1/1]
-   - [X] 如何在中英文字符中间自动插入空格
-   
-   #+begin_src emacs-lisp :tangle yes
-   (use-package! pangu-spacing
-     :config
-     (global-pangu-spacing-mode 1)
-     ;; 在中英文符号之间, 真正地插入空格
-     (setq pangu-spacing-real-insert-separtor t))
-   #+end_src
-   
+    (set-face-background 'org-bold "#fefefe")
+    (set-face-background 'org-verbatim "#fefefe")
+    #+end_src
