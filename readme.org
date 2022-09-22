@@ -140,7 +140,7 @@
   (setq org-html-head
         "<link rel='stylesheet' type='text/css' href='https://gongzhitaao.org/orgcss/org.css'/> ")
   #+end_src
-** General [3/3]
+** General [1/1]
   :PROPERTIES:
   :COOKIE_DATA: checkbox recursive
   :END:
@@ -208,7 +208,6 @@
     (setq valign-fancy-bar t)
     (add-hook 'org-mode-hook #'valign-mode))
   #+end_src
-
 
 ** Tasks [12/12]
  - [X] 如何设置默认的 TODO Keywords
@@ -316,7 +315,7 @@
   (after! org
     (setq org-tag-alist '(("@工作" . ?w) ("@生活" . ?l) ("@学习" . ?s))))
   #+end_src
-** UI [5/5]
+** UI [6/6]
 - [X] 如何自定义各标标题的大小和字体粗细
     #+begin_src emacs-lisp
     (after! org
@@ -383,3 +382,31 @@
     (set-face-background 'org-bold "#fefefe")
     (set-face-background 'org-verbatim "#fefefe")
     #+end_src
+
+- [X] 如何解决中文强调样式前后的空格问题
+  #+begin_src emacs-lisp
+  ;; https://emacs-china.org/t/org-mode/22313?u=vagrantjoker
+  ;; 解决中文标记前后空格的问题
+  (require 'ox)
+  (font-lock-add-keywords 'org-mode
+                          '(("\\cc\\( \\)[/+*_=~][^a-zA-Z0-9]*?[/+*_=~]\\( \\)?\\cc?"
+                             (1 (prog1 () (compose-region (match-beginning 1) (match-end 1) ""))))
+                            ("\\cc?\\( \\)?[/+*_=~][^a-zA-Z0-9]*?[/+*_=~]\\( \\)\\cc"
+                             (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
+                          'append)
+
+  (with-eval-after-load 'org
+    (defun eli-strip-ws-maybe (text _backend _info)
+      (let* ((text (replace-regexp-in-string
+                    "\\(\\cc\\) *\n *\\(\\cc\\)"
+                    "\\1\\2" text));; remove whitespace from line break
+             ;; remove whitespace from `org-emphasis-alist'
+             (text (replace-regexp-in-string "\\(\\cc\\) \\(.*?\\) \\(\\cc\\)"
+                                             "\\1\\2\\3" text))
+             ;; restore whitespace between English words and Chinese words
+             (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text)))
+        text))
+    (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
+
+  #+end_src
