@@ -96,6 +96,7 @@
   #+end_src
 - [X] 如何让 code block 折叠时显示为一个符号
   #+begin_src emacs-lisp
+  ;; learn from: https://github.com/Elilif/.elemacs
   (defun eli-hide-org-block-begin-line (orig from to flag spec)
     (let* ((beg-of-line (save-excursion
                           (beginning-of-line)
@@ -213,7 +214,7 @@ averages, and so on, out of material from the first table.
   参照手册[[https://orgmode.org/manual/Built_002din-Table-Editor.html#Built_002din-table-editor][link]]
 
   #+begin_quote
-  To insert a vertical bar into a table field, use ‘\vert’ or, inside a word ‘abc\vert{}def’.
+  To insert a vertical bar into a table field, use ‘\ vert’ or, inside a word ‘abc\\ vert{}def’.
   #+end_quote
 
 ** Tasks [12/12]
