@@ -1,9 +1,11 @@
 #+title: 100-questions-about-orgmode
 #+options: toc:nil date:nil num:nil
+
 * orgmode [0/0]
-:PROPERTIES:
-:COOKIE_DATA: checkbox recursive
-:END:
+
+#+caption: Orgmode Style Demo
+[[file:demo.png]]
+
 ** Agenda [12/12]
 - [X] 如何设定 Agenda 文件的相对路径
   #+begin_src emacs-lisp :tangle yes
