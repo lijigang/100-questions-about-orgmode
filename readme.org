@@ -329,7 +329,7 @@ averages, and so on, out of material from the first table.
   (after! org
     (setq org-tag-alist '(("@工作" . ?w) ("@生活" . ?l) ("@学习" . ?s))))
   #+end_src
-** UI [7/7]
+** UI [9/9]
 - [X] 如何自定义各标标题的大小和字体粗细
   #+begin_src emacs-lisp
   (after! org
@@ -557,4 +557,28 @@ averages, and so on, out of material from the first table.
                                                             :stroke 0 :scale 1 :padding 0))))
 
             )))
+  #+end_src
+
+- [X] 如何改变符号展示
+  #+begin_src emacs-lisp
+
+  (font-lock-add-keywords
+   'org-mode
+   '(("^ +\\([-*]\\) "
+      (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "▻"))))))
+  #+end_src
+
+- [X] 如何改变任意字符串为 Unicode 符号
+  #+begin_src emacs-lisp
+
+  (defun my-add-pretty-symbol ()
+    "make some word display as Unicode symbols"
+    (setq prettify-symbols-alist
+          '(
+            ("\\pagebreak" . 128204)
+            ("->" . 8594)    ; →
+            ("=>" . 8658)    ; ⇒
+            )))
+
+  (add-hook 'org-mode-hook 'my-add-pretty-symbol)
   #+end_src
