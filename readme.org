@@ -100,19 +100,16 @@
   #+begin_src emacs-lisp
   ;; learn from: https://github.com/Elilif/.elemacs
   (defun eli-hide-org-block-begin-line (orig from to flag spec)
-    (let* ((beg-of-line (save-excursion
-                          (beginning-of-line)
-                          (point)))
-           (lang (car (org-babel-get-src-block-info)))
-           (beg (+ beg-of-line
-                   12
-                   (length lang))))
-      (if (eq spec 'org-hide-block)
-          (funcall orig beg to flag spec)
-        (funcall orig from to flag spec))))
+    (if (eq spec 'org-hide-block)
+        (let* ((beg-of-line (save-excursion
+                              (beginning-of-line)
+                              (point)))
+               (lang (car (org-babel-get-src-block-info)))
+               (beg (+ beg-of-line 12 (length lang))))
+          (funcall orig beg to flag spec))
+      (funcall orig from to flag spec)))
 
   (advice-add 'org-flag-region :around #'eli-hide-org-block-begin-line)
-
   #+end_src
 - [X] 如何禁用 evaluate code block 时的确认提示
   #+begin_src emacs-lisp
