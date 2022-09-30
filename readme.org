@@ -3,8 +3,10 @@
 
 * orgmode [0/0]
 
-#+caption: Orgmode Style Demo
-[[file:demo.png]]
+[[file:demo-org.png]]
+[[file:demo-eaf-rss-reader.png]]
+[[file:demo-eaf-pdf-reader.png]]
+[[file:demo-eaf-browser.png]]
 
 ** Agenda [12/12]
 - [X] 如何设定 Agenda 文件的相对路径
