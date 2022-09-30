@@ -1,7 +1,7 @@
 #+title: 100-questions-about-orgmode
 #+options: toc:nil date:nil num:nil
 
-* orgmode [0/0]
+** Demos
 
 [[file:demo-org.png]]
 [[file:demo-eaf-rss-reader.png]]
@@ -85,7 +85,7 @@
   (setq org-agenda-use-time-grid nil)
   #+end_src
 
-** Block [6/6]
+** Block [7/7]
 
 - [X] 如何在 Source Block 中像在语言 mode 中一样的缩进
   #+begin_src emacs-lisp :tangle yes
@@ -132,6 +132,13 @@
    'org-babel-load-languages
    '((plantuml . t)))
   #+end_src
+- [X] 如何配置 block 默认参数
+   #+begin_src emacs-lisp
+
+    (setq org-babel-default-header-args
+          '((:session . "none")
+            (:results . "replace")))
+   #+end_src
 
 ** Capture [0/0]
 ** Export [1/1]
