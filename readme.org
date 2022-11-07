@@ -190,7 +190,7 @@
       :config
       (ace-pinyin-global-mode +1))
     #+end_src
-** Table [4/4]
+** Table [5/5]
 - [X]  orgmode 的表格是否支持数据透视表
   需要安装额外的 Package:
 
@@ -231,6 +231,17 @@ averages, and so on, out of material from the first table.
   #+begin_quote
   To insert a vertical bar into a table field, use ‘\ vert’ or, inside a word ‘abc\\ vert{}def’.
   #+end_quote
+
+- [X] 如何不导出特定的一个表格?
+
+  有三种方法:
+
+  1. 方法一: 将表格置于 comment block 环境中
+
+  2. 方法二: 将表格置于 Headline 下, 该 Headline 增加一个 :noexport: 的 tag
+
+  3. 方法三: 在文件头的选项配置中 #+options: |:nil
+
 
 ** Tasks [12/12]
 - [X] 如何设置默认的 TODO Keywords
