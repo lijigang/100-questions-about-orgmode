@@ -591,14 +591,13 @@ averages, and so on, out of material from the first table.
 - [X] 如何改变任意字符串为 Unicode 符号
   #+begin_src emacs-lisp
 
-  (defun my-add-pretty-symbol ()
-    "make some word display as Unicode symbols"
-    (setq prettify-symbols-alist
-          '(
-            ("\\pagebreak" . 128204)
-            ("->" . 8594)    ; →
-            ("=>" . 8658)    ; ⇒
-            )))
+  (defun my-prettify-symbols ()
+    "Render words as Unicode symbols."
+    (setq prettify-symbols-alist 
+            '(("\\pagebreak" . 128204)
+              ("->" . ?→)
+              ("=>" . ?⇒)))
+    (prettify-symbols-mode))
 
-  (add-hook 'org-mode-hook 'my-add-pretty-symbol)
+  (add-hook 'org-mode-hook #'my-prettify-symbols)
   #+end_src
